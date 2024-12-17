@@ -5,8 +5,23 @@ import './MyFeed/myFeed.dart';
 import './Profile/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
+import 'package:cloudinary_url_gen/transformation/transformation.dart';
+import 'package:flutter/material.dart';
+import 'package:cloudinary_url_gen/transformation/effect/effect.dart';
+import 'package:cloudinary_url_gen/transformation/resize/resize.dart';
+import 'package:cloudinary_flutter/cloudinary_context.dart';
+import 'package:cloudinary_flutter/cloudinary_object.dart';
+// import 'package:cloudinary_flutter/image_uploader.dart';
+// import 'package:cloudinary_flutter/uploader.dart';
+
+
+
+// var cloudinary=Cloudinary.fromStringUrl('cloudinary://API_KEY:API_SECRET@CLOUD_NAME');
 
 void main() async {
+  //  cloudinary.config.urlConfig.secure = true;
+  // upload();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -122,3 +137,12 @@ class _TabsState extends State<Tabs> {
     );
   }
 }
+// upload() async{
+//   var response = await cloudinary.uploader().upload('https://cloudinary-devs.github.io/cld-docs-assets/assets/images/butterfly.jpeg',
+//     params: UploadParams(
+//         publicId: 'quickstart_butterfly',
+//         uniqueFilename: false,
+//         overwrite: true));
+//   print(response?.data?.publicId);
+//   print(response?.data?.secureUrl);
+// }

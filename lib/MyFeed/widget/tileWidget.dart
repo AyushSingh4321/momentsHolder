@@ -17,7 +17,7 @@ class TileWidget extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                'Image1',
+                title,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
             ),

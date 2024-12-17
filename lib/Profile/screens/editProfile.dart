@@ -31,8 +31,8 @@ class _EditprofileState extends State<Editprofile> {
     if (_formKey.currentState!.validate()) {
       // Process the form data
       print('Name: ${_nameController.text}');
-      print('Mobile No: ${_city.text}');
-      print('Aadhaar No: ${_bio.text}');
+      print('City: ${_city.text}');
+      print('Bio: ${_bio.text}');
       Navigator.of(context).pop();
     }
   }
