@@ -1,4 +1,9 @@
 import 'dart:io'; // For File handling
+import 'package:assignment2/Authentication/auth_service.dart';
+import 'package:assignment2/Profile/model/user_model.dart';
+import 'package:assignment2/Profile/profile_page.dart';
+import 'package:assignment2/cloudinary/cloud.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,14 +17,15 @@ class Editprofile extends StatefulWidget {
   State<Editprofile> createState() => _EditprofileState();
 }
 
+  File? _userImageFile;
 class _EditprofileState extends State<Editprofile> {
   final _formKey = GlobalKey<FormState>();
-  File? _userImageFile;
 
   // Controllers for text fields
   TextEditingController _nameController = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _bio = TextEditingController();
+  UserModel? _currentUser;
 
   // Function to pick image from gallery
   void _pickedImage(File image) {
@@ -27,16 +33,21 @@ class _EditprofileState extends State<Editprofile> {
   }
 
   // Save button action
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       // Process the form data
+
       print('Name: ${_nameController.text}');
       print('City: ${_city.text}');
       print('Bio: ${_bio.text}');
+      await setUserCredentials(_nameController.text,
+          AuthService().getCurrentUser()!.uid, _city.text, _bio.text);
+      
       Navigator.of(context).pop();
     }
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +90,7 @@ class _EditprofileState extends State<Editprofile> {
                     labelText: 'City',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.phone,
+                  // keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your city';
@@ -96,10 +107,12 @@ class _EditprofileState extends State<Editprofile> {
                     labelText: 'Bio',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
+                  // keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your Bio';
+                    } else if (value.length > 35) {
+                      return 'Only upto 35 characters';
                     }
                     return null;
                   },
@@ -121,5 +134,18 @@ class _EditprofileState extends State<Editprofile> {
         ),
       ),
     );
+  }
+}
+
+Future<void> setUserCredentials(
+    String name, String userId, String city, String bio) async {
+  try {
+    var str=await CloudinaryService().uploadImageToCloudinary(_userImageFile!);
+    var temp = await FirebaseFirestore.instance.collection("Users").doc(userId);
+    var temp2 = UserModel(userName: name, city: city, bio: bio, userId: userId,userImage: str );
+    await temp.set(temp2.toJson());
+    print('DONE User!!!!');
+  } catch (e) {
+    print("Error adding post: $e");
   }
 }

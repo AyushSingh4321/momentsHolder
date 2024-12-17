@@ -73,8 +73,10 @@ class _MyAppState extends State<MyApp> {
       ),
       // If user is logged in, show Tabs screen; else, show Auth screen
       home: _isLoggedIn ? const Tabs() : const Auth(),
+     
       routes: {
         Editprofile.routeName: (ctx) => Editprofile(),
+        // Test2.routeName: (ctx)=> Test2(),
       },
     );
   }
